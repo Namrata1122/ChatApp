@@ -2,15 +2,20 @@ const express = require('express');
 const {createServer} = require('node:http');
 const {join} = require('node:path');
 const {Server} = require('socket.io');
-const sqlite3 = require('sqlite3');
-const {open} = require('sqlite');
+
+const initDb = require("./db/pgdbinit");
 
 const app = express();
 const server = createServer(app);
 const io = new Server(server,{connectionStateRecovery:{}});
 
+app.use(express.json())
 // by default express does not serve static files so we need to explicitly tell it to serve static files like html and css
 app.use(express.static('public'));
+
+(async()=>{
+    await initDb();
+})();
 
 app.get('/',(req,res)=>{
     res.sendFile(join(__dirname+'/public/index.html'));
