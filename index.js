@@ -3,6 +3,7 @@ const {createServer} = require('node:http');
 const {join} = require('node:path');
 const {Server} = require('socket.io');
 
+const createDatabase = require("./db/createdb")
 const initDb = require("./db/pgdbinit");
 
 const app = express();
@@ -13,9 +14,15 @@ app.use(express.json())
 // by default express does not serve static files so we need to explicitly tell it to serve static files like html and css
 app.use(express.static('public'));
 
+(async ()=>{
+    await createDatabase().catch((err)=>{
+        console.error("error creating database",err);
+    })
+})
+
 (async()=>{
     await initDb();
-})();
+})
 
 app.get('/',(req,res)=>{
     res.sendFile(join(__dirname+'/public/index.html'));
