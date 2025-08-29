@@ -96,6 +96,18 @@ body {
     padding: 0.5rem 1rem;
 }
 
-#messages>li:nth-child(odd) {
+/* #messages>li:nth-child(odd) {
     background: #efefef;
+} */
+
+#messages li.me{
+    background: #DCF8C6;
+    align-self: flex-end;
+    text-align: right;
+}
+
+#messages li.them{
+    background: #FFF;
+    align-self: flex-start;
+    text-align: left;
 }

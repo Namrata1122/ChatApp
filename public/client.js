@@ -46,10 +46,10 @@ loginForm.addEventListener("submit", async (e) => {
       if (res.ok) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
-        statusDiv.innerText = ":white_check_mark: Logged in!";
+        statusDiv.innerText = "Logged in!";
         window.location.href = "chat.html"; // redirect to chat page
       } else {
-        statusDiv.innerText = ":x: " + data.message;
+        statusDiv.innerText = data.message;
       }
     } catch (err) {
       console.error(err);
