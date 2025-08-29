@@ -1,21 +1,57 @@
-// live connection to the server
-const socket = io();
+const BASE_URL = "/users";
 
-const form = document.getElementById('form');
-const input = document.getElementById('input');
-const messages = document.getElementById('messages');
+const registerForm = document.getElementById("registerForm");
+const loginForm = document.getElementById("loginForm");
+const statusDiv = document.getElementById("status");
 
-form.addEventListener('submit',(e)=>{
-    e.preventDefault(); //prevents html default behaviour of refreshing the page
-    if(input.value){
-        socket.emit('chat message',input.value);
-        input.value = '';
+registerForm.addEventListener("submit",async(e)=>{
+    e.preventDefault();
+    const username = document.getElementById("regUsername").value;
+    const email = document.getElementById("regEmail").value;
+    const password = document.getElementById("regPassword").value;
+
+    try{
+        const res = await fetch(`${BASE_URL}/register`,{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({username,email,password})
+        });
+        const data = await res.json();
+
+        if(res.ok){
+            localStorage.setItem("token",data.token);
+            localStorage.setItem("user",JSON.stringify(data.user));
+            statusDiv.innerText = "Registered and loggedIn!";
+            window.location.href = "chat.html"
+        }else{
+            statusDiv.innerText=data.message;
+        }
+    }catch(err){
+        console.log(err);
     }
 });
 
-socket.on('chat message',(msg)=>{
-    const item = document.createElement('li');
-    item.textContent= msg;
-    messages.appendChild(item);
-    window.scrollTo(0,document.body.scrollHeight);
-})
+loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const username = document.getElementById("loginUsername").value;
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+    try {
+      const res = await fetch(`${BASE_URL}/login`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ username, email, password })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        statusDiv.innerText = ":white_check_mark: Logged in!";
+        window.location.href = "chat.html"; // redirect to chat page
+      } else {
+        statusDiv.innerText = ":x: " + data.message;
+      }
+    } catch (err) {
+      console.error(err);
+    }}
+)

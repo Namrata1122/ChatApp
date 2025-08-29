@@ -15,7 +15,7 @@ const sendAMessage = async(req,res)=>{
             res.status(400).json({message:"Provide a sender and reciever to send message"});
         }
 
-        const recieverExists = findUserById(reciever);
+        const recieverExists = await findUserById(reciever);
         if(!recieverExists){
             res.status(400).json({message:"receiver does not exist."})
         }
@@ -23,7 +23,7 @@ const sendAMessage = async(req,res)=>{
             res.status(400).json({message:"Write a message to start chat."});
         }
 
-        const newMessage = sendMessage(sender,reciever,message);
+        const newMessage =  await sendMessage(sender,reciever,message);
 
         res.status(200).json({message:"Message sent successfully",sender,reciever,message})
     }catch(err){
@@ -32,9 +32,8 @@ const sendAMessage = async(req,res)=>{
 }
 const viewChatHistory = async(req,res)=>{
     try{
-        const sender = req.body.sender_id;
-        const reciever = req.body.reciever_id
-        const chatHistory = await messagesExchanged(sender,reciever);
+        const {sender_id,reciever_id} = req.body;
+        const chatHistory = await messagesExchanged(sender_id,reciever_id);
         res.status(200).json({chatHistory});
     }catch(err){
         console.log(err);

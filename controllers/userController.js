@@ -5,7 +5,7 @@ const {
     findUserByEmail,
     findUserByUsername,
     insertNewUser,
-    allUsers
+    getAllUsers
 } = require('../services/userQueries');
 require('dotenv').config();
 const {BadRequestError} = require('../errors/badrequest');
@@ -52,10 +52,9 @@ const login = async(req,res)=>{
     res.status(200).json({message:"User LOgged in successfully",token,user});
 }
 
-const allusers = async(req, res)=>{
-    const allusers = await allUsers();
+const getAllusers = async(req, res)=>{
+    const allusers = await getAllUsers();
     res.status(200).json({allusers});
-
 }
 
-module.exports = {register,login,allusers};
+module.exports = {register,login,getAllusers};

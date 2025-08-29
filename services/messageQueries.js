@@ -13,7 +13,9 @@ const sendMessage = async(sender_id,reciever_id,content)=>{
 const messagesExchanged = async(sender_id,reciever_id)=>{
     try{
         const result = await pool.query(`SELECT * from messages 
-            where reciever_id = $1 AND sender_id = $2`,[reciever_id,sender_id]);
+            where (reciever_id = $1 AND sender_id = $2)
+            OR (reciever_id = $2 AND sender_id = $1) ORDER BY created_at ASC`,[reciever_id,sender_id]);
+        console.log(result.rows.length);
         return result.rows;
     }catch(err){
         console.log("error while checking history of exchanged messages between two users",err);

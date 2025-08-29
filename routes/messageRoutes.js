@@ -8,7 +8,7 @@ const {
 } = require('../controllers/messageController');
 
 router.route('/sendmessage').post(sendAMessage);
-router.route('/chathistory').get(viewChatHistory);
+router.route('/chathistory').post(viewChatHistory);
 router.route('/allchats').get(viewAllMessagesBetweenAllUsers);
 
 module.exports = router;

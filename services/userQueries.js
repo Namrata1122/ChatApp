@@ -24,8 +24,8 @@ const insertNewUser =  async(username, email, password)=>{
     return result.rows[0];
 }
 
-const allUsers = async()=>{
-    const result = await pool.query("Select * from users");
+const getAllUsers = async()=>{
+    const result = await pool.query("Select id,username from users ORDER BY username ASC");
     return result.rows;
 }
 
@@ -34,5 +34,5 @@ module.exports = {
     findUserByUsername,
     findUserById,
     insertNewUser,
-    allUsers
+    getAllUsers
 };
